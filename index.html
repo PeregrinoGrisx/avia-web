@@ -338,9 +338,15 @@
 
       <div class="boxes__panel cut">
         <div class="boxes__art">
-          <svg viewBox="0 0 320 260" class="boxsvg" id="boxsvg" aria-hidden="true">
-            <g id="boxShape" fill="none" stroke="#58A6DE" stroke-width="2" stroke-linejoin="round"></g>
-          </svg>
+          <div class="box3d" id="box3d" role="img" aria-label="Modelo tridimensional del formato de caja seleccionado">
+            <svg viewBox="0 0 320 260" class="boxsvg" id="boxsvg" aria-hidden="true">
+              <g id="boxShape" fill="none" stroke="#58A6DE" stroke-width="2" stroke-linejoin="round"></g>
+            </svg>
+          </div>
+          <p class="box3d__hint" id="box3dHint" aria-hidden="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 L4 12 L8 17 M16 7 L20 12 L16 17"/></svg>
+            Arrastra para girar
+          </p>
           <div class="boxes__dims"><span id="boxDims">—</span></div>
         </div>
         <div class="boxes__info">
@@ -607,10 +613,14 @@
   </div>
   <div class="wrap foot__bottom">
     <p>© <span id="year">2026</span> AVIA Ingeniería y Servicios SpA. Todos los derechos reservados.</p>
-    <p class="foot__credit">Sitio en desarrollo · Punto Gris</p>
+    <p class="foot__credit">
+      Branding y diseño web por
+      <a href="https://puntogris.cl" target="_blank" rel="noopener">Punto Gris</a>
+    </p>
   </div>
 </footer>
 
 <script src="script.js"></script>
+<script src="box3d.js"></script>
 </body>
 </html>

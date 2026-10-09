@@ -75,6 +75,28 @@ ordena todo bajo un modelo integral y deja los demás servicios como complemento
 
 ## Pendientes antes de publicar
 
+### ⚠️ Lo más importante: la sección Equipos es inventada
+
+**El brief no nombra ni un solo formato de caja.** Menciona nueve veces "armado de cajas"
+y "arriendo de equipos de armado", pero nunca dice cuáles. Lo que está hoy en el sitio
+(RSC, bandeja, troquelada, con tapa, display), sus equipos asociados, cierres y
+rendimientos en cajas/min son **referencias genéricas de la industria del packing que
+redacté yo**, no el catálogo de AVIA.
+
+Lo mismo vale para las geometrías 3D en `box3d.js`: proporciones plausibles, no medidas reales.
+
+Preguntas concretas para Jorge antes de dar por buena esta sección:
+
+1. ¿Qué formatos de caja arman efectivamente? ¿Cuáles son los más frecuentes?
+2. ¿Qué equipos tienen en arriendo? Marca, modelo, cantidad disponible.
+3. ¿Rendimiento real de cada equipo (cajas/min o cajas/hora)?
+4. ¿Medidas típicas de las cajas que trabajan?
+5. ¿Tienen fotos de los equipos y de las cajas? ¿En varios ángulos?
+6. ¿Existe algún modelo 3D o plano técnico de los equipos?
+
+Con las respuestas 1–4 se corrigen los textos; con la 5 se puede reemplazar el 3D
+procedural por un visor de secuencia fotográfica; con la 6, cargar un GLB real.
+
 ### Datos a confirmar con el cliente
 - [ ] **Cifras de los KPIs**: están con valores de referencia (`+12` plantas, `+80` personas, `98%` disponibilidad). Solo `+6 años` sale del brief. Hay que reemplazarlas o quitar el bloque.
 - [ ] **Teléfono**: el brief no lo trae. Está como `+56 9 0000 0000` en nav, contacto y footer.

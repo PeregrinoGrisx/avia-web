@@ -416,6 +416,28 @@ a{ color:inherit; }
     radial-gradient(circle at 50% 45%, rgba(29,120,188,.16), transparent 62%),
     repeating-linear-gradient(135deg, rgba(255,255,255,.02) 0 2px, transparent 2px 12px);
 }
+/* Visor 3D (reemplaza al SVG cuando three.js carga) */
+.box3d{
+  position:relative; width:100%; max-width:360px; aspect-ratio:1/1;
+  display:flex; align-items:center; justify-content:center;
+}
+.box3d canvas{ width:100%!important; height:100%!important; display:block; outline:none; }
+.box3d.is-3d .boxsvg{ display:none; }
+
+.box3d__hint{
+  position:absolute; bottom:48px; left:0; right:0; margin:0;
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  font-family:var(--ff-display); font-size:.7rem; font-weight:500;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--tx-light);
+  opacity:0; transition:opacity .6s var(--ease) .3s; pointer-events:none;
+}
+.box3d__hint.is-on{ opacity:.5; }
+.boxes__art.is-grabbed .box3d__hint{ opacity:0; transition-delay:0s; }
+.box3d__hint svg{
+  width:15px; height:15px; fill:none; stroke:currentColor;
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+}
+
 .boxsvg{ width:100%; max-width:320px; }
 .boxsvg #boxShape path, .boxsvg #boxShape polygon{
   stroke-dasharray:1200; stroke-dashoffset:0;
@@ -586,6 +608,12 @@ a{ color:inherit; }
   border-top:1px solid var(--line-dark); padding-block:24px 30px;
 }
 .foot__bottom p{ margin:0; font-size:.78rem; opacity:.55; }
+.foot__credit{ opacity:.7!important; }
+.foot__credit a{
+  color:var(--brand-300); text-decoration:none;
+  border-bottom:1px solid rgba(88,166,222,.35); padding-bottom:1px; transition:.2s;
+}
+.foot__credit a:hover{ color:#fff; border-bottom-color:#fff; }
 
 /* ============================================================
    REVEAL

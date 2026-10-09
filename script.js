@@ -211,6 +211,9 @@
       void svg.offsetWidth;
       svg.classList.add('is-drawing');
     }
+
+    // El visor 3D escucha este evento (box3d.js)
+    document.dispatchEvent(new CustomEvent('avia:box', { detail: { key: key } }));
   }
 
   tabs.forEach(function (tab) {
