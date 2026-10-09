@@ -75,6 +75,49 @@ ordena todo bajo un modelo integral y deja los demás servicios como complemento
 
 ## Pendientes antes de publicar
 
+### Hallazgos del sitio actual (aviaing.cl)
+
+Auditoría del sitio vigente, hecha solo para extraer información. WordPress + Yoast,
+última actualización de contenido en **diciembre 2024**.
+
+**El sitio actual no menciona el negocio real. Ni una vez.** Conteo sobre el texto
+completo de las cuatro páginas:
+
+| Término | Apariciones |
+|---|---|
+| packing | **0** |
+| caja / cajas | **0** |
+| armado | **0** |
+| embalaje | **0** |
+| paletizado | **0** |
+| arriendo | **0** |
+| agroindustria / fruta / exportación | **0** |
+
+El brief define a AVIA como "soluciones integrales para procesos de packing y armado de
+cajas, arriendo de equipos de armado". Nada de eso aparece en su web. Esto explica
+exactamente por qué Jorge dice que el sitio "se siente genérico y no comunica qué hace
+diferente a AVIA": no es un problema de diseño, es que **nunca llegó a describir el negocio**.
+
+**Datos de contacto encontrados** (no estaban en el brief):
+- Teléfono: `+56 9 4356 7890` — enlazado como `tel:` en la página de contacto. **Confirmar con Jorge**, podría ser del tema de WordPress.
+- Segundo correo: `administracionac@aviaing.cl`, además del `mantencionac@aviaing.cl` del brief.
+- **Cero redes sociales** en todo el sitio. Confirma el "sin responder" del brief.
+
+**Logos de terceros** (los únicos tres del sitio):
+- **Agrosuper** — agroindustria de primer nivel en Chile, directamente relevante para packing.
+- **Servipag**
+- **SEC** (Superintendencia de Electricidad y Combustibles) — probablemente una acreditación,
+  no un cliente: en servicios mencionan "servicios eléctricos certificados". **Confirmar cuál de las dos cosas es.**
+
+Si Agrosuper autoriza aparecer, es el activo de credibilidad más fuerte que tiene AVIA
+y hoy está enterrado en un carrusel al pie de página.
+
+**Fotografía: toda de stock.** Revisadas las imágenes, son operarios europeos genéricos en
+plantas que no son de AVIA. Confirma el "no tengo, habría que conseguirlas" del brief.
+
+**Blog**: existe con tres entradas de muestra ("entrada-de-muestra-1/2/3") nunca
+reemplazadas. No se incluye en el sitio nuevo.
+
 ### ⚠️ Lo más importante: la sección Equipos es inventada
 
 **El brief no nombra ni un solo formato de caja.** Menciona nueve veces "armado de cajas"
