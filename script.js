@@ -6,6 +6,35 @@
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ============================================================
+     Tema claro / oscuro
+     ------------------------------------------------------------
+     Por defecto oscuro: es el look principal de la marca, no una
+     preferencia del sistema. La elección del visitante se recuerda.
+     ============================================================ */
+  var THEME_KEY = 'avia-theme';
+  var themeBtns = document.querySelectorAll('[data-set-theme]');
+
+  function readTheme() {
+    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+  function applyTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    themeBtns.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.setTheme === mode));
+    });
+    document.dispatchEvent(new CustomEvent('avia:theme', { detail: { mode: mode } }));
+  }
+  function setTheme(mode) {
+    applyTheme(mode);
+    try { localStorage.setItem(THEME_KEY, mode); } catch (e) {}
+  }
+
+  applyTheme(readTheme() === 'light' ? 'light' : 'dark');
+  themeBtns.forEach(function (b) {
+    b.addEventListener('click', function () { setTheme(b.dataset.setTheme); });
+  });
+
   /* ---------- Año footer ---------- */
   var y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();

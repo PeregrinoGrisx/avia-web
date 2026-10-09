@@ -4,12 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AVIA Ingeniería y Servicios — Outsourcing de procesos de packing</title>
+<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="AVIA opera tus procesos de packing de principio a fin: personal especializado, equipos de armado de cajas, operación, mantención y soporte técnico bajo una sola gestión.">
 <link rel="icon" href="assets/avia-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=3">
+<script>
+/* Aplica el tema antes de pintar, para que no haya parpadeo al cargar. */
+(function(){try{var t=localStorage.getItem('avia-theme');
+document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}
+catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
+</script>
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 
@@ -33,7 +40,17 @@
     </nav>
 
     <div class="nav__actions">
-      <a class="btn btn--ghost nav__tel" href="tel:+56000000000">+56 9 0000 0000</a>
+      <div class="themetoggle" role="group" aria-label="Tema del sitio">
+        <button type="button" class="themetoggle__btn" data-set-theme="light" aria-pressed="false" title="Modo claro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M21.4 12h-2.2M4.8 12H2.6M18.6 5.4l-1.6 1.6M7 17l-1.6 1.6M18.6 18.6 17 17M7 7 5.4 5.4"/></svg>
+          <span class="sr">Modo claro</span>
+        </button>
+        <button type="button" class="themetoggle__btn" data-set-theme="dark" aria-pressed="true" title="Modo oscuro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg>
+          <span class="sr">Modo oscuro</span>
+        </button>
+      </div>
+      <a class="btn btn--ghost nav__tel" href="tel:+56943567890">+56 9 4356 7890</a>
       <a class="btn btn--primary" href="#contacto">Solicitar evaluación</a>
     </div>
 
@@ -49,6 +66,21 @@
     <a href="#proceso">Cómo trabajamos</a>
     <a href="#nosotros">Nosotros</a>
     <a href="#faq">Preguntas</a>
+
+    <div class="mobilemenu__theme">
+      <span>Tema</span>
+      <div class="themetoggle" role="group" aria-label="Tema del sitio">
+        <button type="button" class="themetoggle__btn" data-set-theme="light" aria-pressed="false" title="Modo claro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M21.4 12h-2.2M4.8 12H2.6M18.6 5.4l-1.6 1.6M7 17l-1.6 1.6M18.6 18.6 17 17M7 7 5.4 5.4"/></svg>
+          <span class="sr">Modo claro</span>
+        </button>
+        <button type="button" class="themetoggle__btn" data-set-theme="dark" aria-pressed="true" title="Modo oscuro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg>
+          <span class="sr">Modo oscuro</span>
+        </button>
+      </div>
+    </div>
+
     <a class="btn btn--primary btn--block" href="#contacto">Solicitar evaluación</a>
   </div>
 </header>
@@ -61,7 +93,7 @@
     <div class="hero__grid"></div>
     <div class="hero__glow"></div>
     <svg class="hero__lines" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-      <g stroke="rgba(88,166,222,.18)" stroke-width="1" fill="none">
+      <g stroke="var(--hero-line)" stroke-width="1" fill="none">
         <path d="M-100 700 L420 180" /><path d="M20 760 L540 240" />
         <path d="M1100 900 L1620 380" /><path d="M980 880 L1500 360" />
       </g>
@@ -148,6 +180,41 @@
       <span>Agroindustria</span><i></i><span>Frutícola y exportación</span><i></i><span>Alimentos y bebidas</span><i></i>
       <span>Acuicultura</span><i></i><span>Vitivinícola</span><i></i><span>Retail y distribución</span><i></i>
       <span>Manufactura</span><i></i><span>Logística</span><i></i>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARMADO POR SCROLL ============ -->
+<section class="fold" id="armado">
+  <div class="fold__sticky">
+    <div class="wrap fold__grid">
+      <div class="fold__stage">
+        <div class="fold__canvas" id="foldbox"></div>
+        <p class="fold__hint">Desplázate para armar la caja</p>
+      </div>
+
+      <div class="fold__copy">
+        <p class="eyebrow">El proceso, paso a paso</p>
+        <h2 id="foldTitle">Plancha troquelada</h2>
+        <p class="fold__text" id="foldText">
+          El cartón llega plano y troquelado. En bodega ocupa una fracción del volumen
+          de una caja armada, y así se almacena y se transporta.
+        </p>
+
+        <ol class="fold__dots">
+          <li class="fold__dot is-on"><b>01</b><span>Plancha</span></li>
+          <li class="fold__dot"><b>02</b><span>Paredes</span></li>
+          <li class="fold__dot"><b>03</b><span>Solapas menores</span></li>
+          <li class="fold__dot"><b>04</b><span>Caja formada</span></li>
+        </ol>
+
+        <div class="fold__bar"><i id="foldBar"></i></div>
+
+        <p class="fold__foot">
+          Cada uno de estos pliegues es un punto donde la máquina puede fallar.
+          Por eso operamos el equipo, no solo lo arrendamos.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -621,7 +688,8 @@
   </div>
 </footer>
 
-<script src="script.js?v=3"></script>
-<script src="box3d.js?v=3"></script>
+<script src="script.js?v=4"></script>
+<script src="box3d.js?v=4"></script>
+<script src="foldbox.js?v=4"></script>
 </body>
 </html>

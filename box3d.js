@@ -83,7 +83,18 @@
     }
 
     /* ---------- Luces ---------- */
-    scene.add(new THREE.HemisphereLight(0xcfe4f7, 0x16222e, 0.30));
+    // El rebote inferior sigue al tema: en claro la caja recibe luz del
+    // entorno por abajo, en oscuro se hunde. Sin esto flota recortada.
+    var hemi = new THREE.HemisphereLight(0xcfe4f7, 0x16222e, 0.30);
+    scene.add(hemi);
+
+    function syncTheme(mode) {
+      var light = mode === 'light';
+      hemi.groundColor.setHex(light ? 0xdce6ee : 0x16222e);
+      hemi.intensity = light ? 0.62 : 0.30;
+      rim.intensity = light ? 0.42 : 0.70;
+    }
+    document.addEventListener('avia:theme', function (e) { syncTheme(e.detail.mode); });
 
     var key = new THREE.DirectionalLight(0xffffff, 0.95);
     key.position.set(2.6, 4.2, 3.0);
@@ -314,6 +325,7 @@
     }
 
     build(currentKey);
+    syncTheme(document.documentElement.getAttribute('data-theme'));
     frame();
     mount.classList.add('is-3d');
     if (hint) hint.classList.add('is-on');
