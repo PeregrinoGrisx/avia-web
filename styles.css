@@ -159,7 +159,7 @@ a{ color:inherit; }
 .nav__links a{
   font-family:var(--ff-display); font-weight:500; font-size:.88rem;
   text-decoration:none; color:var(--tx-onDark); opacity:.78;
-  position:relative; padding-block:4px; transition:.2s;
+  position:relative; padding-block:4px; transition:.2s; white-space:nowrap;
 }
 .nav__links a::after{
   content:''; position:absolute; left:0; bottom:0; height:1.5px; width:0;
@@ -262,13 +262,14 @@ a{ color:inherit; }
   border:1px solid var(--line-dark); padding:5px 10px;
 }
 
-/* KPIs */
+/* KPIs — viven fuera del hero y suben para solaparlo.
+   Si vuelven dentro, el overflow:hidden del hero les corta el pie. */
+.kpis-sec{ position:relative; z-index:3; margin-top:-56px; background:var(--ink); }
 .kpis{
   display:grid; grid-template-columns:repeat(4,1fr);
   background:var(--ink-2); border:1px solid var(--line-dark);
-  margin-bottom:-56px; position:relative; z-index:3;
 }
-.kpi{ padding:28px 26px; border-right:1px solid var(--line-dark); }
+.kpi{ padding:28px 26px; border-right:1px solid var(--line-dark); min-width:0; }
 .kpi:last-child{ border-right:0; }
 .kpi b{
   display:block; font-family:var(--ff-display); font-weight:800;
@@ -405,27 +406,27 @@ a{ color:inherit; }
 .boxtab.is-active{ background:var(--brand); border-color:var(--brand); color:#fff; }
 
 .boxes__panel{
-  display:grid; grid-template-columns:.9fr 1.1fr; gap:0;
+  display:grid; grid-template-columns:1.05fr .95fr; gap:0;
   background:var(--ink-2); border:1px solid var(--line-dark);
-  min-height:400px;
+  min-height:480px;
 }
 .boxes__art{
   position:relative; border-right:1px solid var(--line-dark);
-  display:flex; align-items:center; justify-content:center; padding:36px;
+  display:flex; align-items:center; justify-content:center; padding:20px;
   background:
     radial-gradient(circle at 50% 45%, rgba(29,120,188,.16), transparent 62%),
     repeating-linear-gradient(135deg, rgba(255,255,255,.02) 0 2px, transparent 2px 12px);
 }
 /* Visor 3D (reemplaza al SVG cuando three.js carga) */
 .box3d{
-  position:relative; width:100%; max-width:360px; aspect-ratio:1/1;
+  position:relative; width:100%; max-width:460px; aspect-ratio:1/1;
   display:flex; align-items:center; justify-content:center;
 }
 .box3d canvas{ width:100%!important; height:100%!important; display:block; outline:none; }
 .box3d.is-3d .boxsvg{ display:none; }
 
 .box3d__hint{
-  position:absolute; bottom:48px; left:0; right:0; margin:0;
+  position:absolute; bottom:14px; left:0; right:0; margin:0;
   display:flex; align-items:center; justify-content:center; gap:7px;
   font-family:var(--ff-display); font-size:.7rem; font-weight:500;
   letter-spacing:.1em; text-transform:uppercase; color:var(--tx-light);
@@ -643,7 +644,7 @@ a{ color:inherit; }
   .foot__inner{ grid-template-columns:1fr 1fr; }
 }
 
-@media (max-width:960px){
+@media (max-width:1080px){
   .nav__links, .nav__actions{ display:none; }
   .nav__burger{ display:flex; }
   .nav{ background:rgba(9,21,33,.9); backdrop-filter:blur(14px); border-bottom-color:var(--line-dark); }

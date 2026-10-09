@@ -64,8 +64,6 @@
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(W, H);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputEncoding = THREE.sRGBEncoding;
     mount.appendChild(renderer.domElement);
 
@@ -73,48 +71,41 @@
 
     var camera = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
     camera.position.set(1.75, 1.25, 2.15);
-    camera.lookAt(0, -0.02, 0);
+    camera.lookAt(0, 0, 0);
+
+    // Radio que cabe en cuadro con margen, para cualquier giro.
+    // Se recalcula al redimensionar porque depende del aspect.
+    function fitRadius() {
+      var d = camera.position.length();
+      var halfH = d * Math.tan((camera.fov / 2) * Math.PI / 180);
+      var halfW = halfH * camera.aspect;
+      return Math.min(halfH, halfW) * 0.80;
+    }
 
     /* ---------- Luces ---------- */
-    scene.add(new THREE.HemisphereLight(0xcfe4f7, 0x1a2b3a, 0.34));
+    scene.add(new THREE.HemisphereLight(0xcfe4f7, 0x16222e, 0.30));
 
-    var key = new THREE.DirectionalLight(0xfff4e4, 0.82);
+    var key = new THREE.DirectionalLight(0xffffff, 0.95);
     key.position.set(2.6, 4.2, 3.0);
-    key.castShadow = true;
-    key.shadow.mapSize.set(1024, 1024);
-    key.shadow.camera.near = 0.5;
-    key.shadow.camera.far = 12;
-    key.shadow.camera.left = -1.6;
-    key.shadow.camera.right = 1.6;
-    key.shadow.camera.top = 1.6;
-    key.shadow.camera.bottom = -1.6;
-    key.shadow.bias = -0.0012;
     scene.add(key);
 
     // Luz de contra en azul de marca: da el acento tecnológico
-    var rim = new THREE.DirectionalLight(0x58A6DE, 0.62);
+    var rim = new THREE.DirectionalLight(0x58A6DE, 0.70);
     rim.position.set(-3.2, 1.4, -2.6);
     scene.add(rim);
 
-    var fill = new THREE.DirectionalLight(0xffffff, 0.12);
+    var fill = new THREE.DirectionalLight(0xffffff, 0.16);
     fill.position.set(-1.5, 0.6, 2.5);
     scene.add(fill);
 
-    /* ---------- Piso de sombra ---------- */
-    var floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(8, 8),
-      new THREE.ShadowMaterial({ opacity: 0.32 })
-    );
-    floor.rotation.x = -Math.PI / 2;
-    floor.receiveShadow = true;
-    scene.add(floor);
-
-    /* ---------- Materiales ---------- */
+    /* ---------- Materiales ----------
+       Gris neutro, no kraft: el cartón café competía con el azul
+       de marca. Para volver al kraft: 0xA87F54 / 0x8A6742.        */
     var cardboard = new THREE.MeshStandardMaterial({
-      color: 0xA87F54, roughness: 0.95, metalness: 0.0
+      color: 0x8C9195, roughness: 0.90, metalness: 0.0
     });
     var cardboardIn = new THREE.MeshStandardMaterial({
-      color: 0x8A6742, roughness: 0.97, metalness: 0.0
+      color: 0x6B7175, roughness: 0.93, metalness: 0.0
     });
     var cut = new THREE.MeshStandardMaterial({
       color: 0x101D28, roughness: 1.0, metalness: 0.0
@@ -124,14 +115,12 @@
     scene.add(pivot);
 
     var model = null;
+    var rawRadius = 1;
     var T = 0.028; // espesor del cartón
 
     /* ---------- Constructor de cajas ---------- */
     function slab(w, h, d, mat) {
-      var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat || cardboard);
-      m.castShadow = true;
-      m.receiveShadow = true;
-      return m;
+      return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat || cardboard);
     }
 
     function buildBox(spec) {
@@ -203,14 +192,12 @@
           [-1, 1].forEach(function (sx) {
             var hole = slab(vw, vh, T * 2.2, cut);
             hole.position.set(sx * x * 0.22, T, sz * (z / 2 - T / 2));
-            hole.castShadow = false;
             g.add(hole);
           });
         });
         [-1, 1].forEach(function (sx) {
           var hole = slab(T * 2.2, vh * 0.8, z * 0.22, cut);
           hole.position.set(sx * (x / 2 - T / 2), T, 0);
-          hole.castShadow = false;
           g.add(hole);
         });
       }
@@ -219,7 +206,6 @@
       if (spec.top === 'open') {
         var inner = slab(x - 2 * T - 0.004, 0.004, z - 2 * T - 0.004, cardboardIn);
         inner.position.y = -y / 2 + T + 0.003;
-        inner.castShadow = false;
         g.add(inner);
       }
 
@@ -235,15 +221,19 @@
       if (model) pivot.remove(model);
       model = buildBox(spec);
 
-      // Normaliza el tamaño en pantalla y apoya la caja en el piso
+      // Escala contra la ESFERA envolvente, no contra el ancho: así la
+      // caja cabe en cuadro en cualquier ángulo de giro y nunca se corta.
       var box = new THREE.Box3().setFromObject(model);
-      var size = new THREE.Vector3();
-      box.getSize(size);
-      var scale = 1.02 / Math.max(size.x, size.z);
-      model.scale.setScalar(scale);
+      var sphere = new THREE.Sphere();
+      box.getBoundingSphere(sphere);
+      rawRadius = sphere.radius;
+      model.scale.setScalar(fitRadius() / rawRadius);
 
+      // Centra el modelo para que gire sobre sí mismo
       box.setFromObject(model);
-      model.position.y -= box.min.y;
+      var center = new THREE.Vector3();
+      box.getCenter(center);
+      model.position.sub(center);
 
       pivot.add(model);
       tween.v = reduced ? 1 : 0; // animación de entrada
@@ -265,9 +255,9 @@
     });
     el.addEventListener('pointermove', function (e) {
       if (!dragging) return;
+      // Giro libre en los dos ejes, sin tope: 360° completos
       targetY += (e.clientX - last.x) * 0.009;
-      targetX += (e.clientY - last.y) * 0.006;
-      targetX = Math.max(-0.35, Math.min(0.85, targetX));
+      targetX += (e.clientY - last.y) * 0.007;
       last = { x: e.clientX, y: e.clientY };
     });
     function endDrag(e) {
@@ -292,6 +282,7 @@
       renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      if (model) model.scale.setScalar(fitRadius() / rawRadius);
     }
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(mount);
     else window.addEventListener('resize', resize);
