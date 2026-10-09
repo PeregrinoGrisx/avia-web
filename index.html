@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 
@@ -125,10 +125,8 @@
     </div>
   </div>
 
-</section>
-
-<!-- KPI strip — fuera del hero: el overflow:hidden del hero recortaba el solape -->
-<div class="kpis-sec">
+  <!-- KPI strip. Sin margen negativo: sacaba la franja fuera del hero
+       y el overflow:hidden del hero le cortaba las etiquetas. -->
   <div class="wrap">
     <div class="kpis cut reveal">
       <div class="kpi"><b data-count="6" data-prefix="+">+6</b><span>Años operando bajo estándar industrial</span></div>
@@ -137,7 +135,7 @@
       <div class="kpi"><b data-count="98" data-suffix="%">98%</b><span>Disponibilidad de equipos</span></div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- ============ SECTORES MARQUEE ============ -->
 <section class="marquee-sec">
@@ -623,7 +621,7 @@
   </div>
 </footer>
 
-<script src="script.js"></script>
-<script src="box3d.js"></script>
+<script src="script.js?v=3"></script>
+<script src="box3d.js?v=3"></script>
 </body>
 </html>

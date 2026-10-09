@@ -262,10 +262,12 @@ a{ color:inherit; }
   border:1px solid var(--line-dark); padding:5px 10px;
 }
 
-/* KPIs — viven fuera del hero y suben para solaparlo.
-   Si vuelven dentro, el overflow:hidden del hero les corta el pie. */
-.kpis-sec{ position:relative; z-index:3; margin-top:-56px; background:var(--ink); }
+/* KPIs — última fila del hero.
+   OJO: nada de margin-bottom negativo aquí. El hero tiene overflow:hidden
+   (para el degradado y las diagonales), así que todo lo que se salga de su
+   caja se recorta, y lo primero en caerse son las etiquetas. */
 .kpis{
+  position:relative; z-index:3;
   display:grid; grid-template-columns:repeat(4,1fr);
   background:var(--ink-2); border:1px solid var(--line-dark);
 }
@@ -280,7 +282,7 @@ a{ color:inherit; }
 /* ============================================================
    MARQUEE
    ============================================================ */
-.marquee-sec{ background:var(--ink); padding:100px 0 34px; overflow:hidden; }
+.marquee-sec{ background:var(--ink); padding:44px 0 34px; overflow:hidden; }
 .marquee-sec__label{
   font-family:var(--ff-display); font-size:.7rem; font-weight:600;
   letter-spacing:.2em; text-transform:uppercase; color:var(--tx-light);
