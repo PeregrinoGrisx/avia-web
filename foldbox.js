@@ -17,7 +17,6 @@
 (function () {
   'use strict';
 
-  var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
 
   var mount = document.getElementById('foldbox');
   var section = document.getElementById('armado');
@@ -31,12 +30,16 @@
   var STAGES = [
     { at: 0.00, title: 'Plancha troquelada',
       text: 'El cartón llega plano y troquelado. En bodega ocupa una fracción del volumen de una caja armada, y así se almacena y se transporta.' },
-    { at: 0.12, title: 'Levante de paredes',
-      text: 'La formadora pliega las cuatro caras sobre sus líneas de corte y fija las esquinas. Es el punto donde la precisión del equipo define la escuadra de la caja.' },
-    { at: 0.40, title: 'Solapas menores',
-      text: 'Las solapas cortas bajan primero, hacia el interior. Quedan de apoyo para las siguientes y dan rigidez al borde superior.' },
-    { at: 0.64, title: 'Caja formada',
-      text: 'Las solapas mayores cierran sobre las anteriores y se juntan al centro. La caja sale lista para sellado con cinta, cola o grapa.' }
+    { at: 0.10, title: 'Levante de paredes',
+      text: 'La formadora pliega las cuatro caras sobre sus líneas de corte y fija las esquinas. Aquí la precisión del equipo define la escuadra de la caja.' },
+    { at: 0.34, title: 'Caja abierta',
+      text: 'La caja queda formada y abierta, lista para recibir el producto. Es el momento en que se integra con tu línea: llenado, pesaje, control de calidad.' },
+    { at: 0.48, title: 'Solapas menores',
+      text: 'Con el producto adentro empieza el cierre. Las solapas cortas bajan primero y quedan de apoyo para las siguientes.' },
+    { at: 0.66, title: 'Caja cerrada',
+      text: 'Las solapas mayores cierran sobre las anteriores y se juntan al centro. Sale lista para sellado con cinta, cola o grapa.' },
+    { at: 0.85, title: 'Lista para paletizar',
+      text: 'Cada caja se suma a la carga. Repetir esto miles de veces por turno, sin detenciones y con la misma escuadra, es exactamente el trabajo del que nos hacemos cargo.' }
   ];
 
   var elTitle = document.getElementById('foldTitle');
@@ -71,12 +74,7 @@
   var io = new IntersectionObserver(function (e) {
     if (!e[0].isIntersecting) return;
     io.disconnect();
-    var s = document.createElement('script');
-    s.src = THREE_URL;
-    s.async = true;
-    s.onload = start;
-    s.onerror = function () { section.classList.add('is-failed'); };
-    document.head.appendChild(s);
+    window.aviaThree().then(start, function () { section.classList.add('is-failed'); });
   }, { rootMargin: '400px' });
   io.observe(section);
 
@@ -180,8 +178,38 @@
     // Las mayores cierran un espesor más arriba para apoyarse sobre las menores
     walls.forEach(function (w) { if (w.major) w.flap.position.y = T * 1.1; });
 
+    /* ---------- Cajas de acompañamiento para el paletizado ----------
+       En el último tramo la caja deja de estar sola: aparecen otras
+       cinco y se arma una capa de pallet. Son cajas cerradas simples,
+       no necesitan el aparejo de pliegues.                            */
+    var mates = [];
+    var GAP = 0.02;
+    var HX = (BW + GAP) / 2, HZ = (BD + GAP) / 2, LY = BH + GAP;
+
+    // Bloque 2×2 en la base y dos cajas encima. Una disposición en cruz
+    // se lee como un racimo suelto; un bloque compacto se lee como carga.
+    // La caja recién armada ocupa la esquina (-HX,-HZ): durante este tramo
+    // se desplaza hasta ahí para que el conjunto quede centrado en cuadro.
+    var LAYOUT = [
+      [ HX, 0,  -HZ], [-HX, 0,   HZ], [ HX, 0,  HZ],
+      [-HX, LY, -HZ], [ HX, LY,  HZ]
+    ];
+    // La caja principal tiene su base en y=0 dentro del grupo, así que su
+    // centro queda medio alto más arriba. Las copias son cubos centrados:
+    // hay que subirlas ese medio alto o se hunden bajo el resto.
+    var BASE_Y = BH / 2;
+
+    LAYOUT.forEach(function (pos, i) {
+      var m = new THREE.Mesh(new THREE.BoxGeometry(BW, BH, BD), card);
+      m.userData.home = new THREE.Vector3(pos[0], BASE_Y + pos[1], pos[2]);
+      m.userData.delay = i * 0.08;
+      m.visible = false;
+      mates.push(m);
+    });
+
     var pivot = new THREE.Group();
     pivot.add(box);
+    mates.forEach(function (m) { pivot.add(m); });
     box.position.y = -BH / 2 + 0.06; // centra la caja armada en cuadro
     scene.add(pivot);
 
@@ -189,16 +217,17 @@
        La plancha extendida mide más del doble que la caja armada, así que
        la cámara parte lejos y se acerca a medida que se pliega. Con una
        distancia fija, o se corta la plancha o la caja queda diminuta.     */
-    var D_FLAT = 4.5, D_BOX = 3.0;
+    var D_FLAT = 4.5, D_BOX = 3.0, D_PILE = 5.4;
 
-    function frameCamera(up) {
-      var d = D_FLAT + (D_BOX - D_FLAT) * up;
-      var k = Math.max(1, 1.05 / camera.aspect); // margen extra si es angosto
+    function frameCamera(up, pile) {
+      var d = D_FLAT + (D_BOX - D_FLAT) * up;        // se acerca al plegar
+      d = d + (D_PILE - d) * (pile || 0);            // y se aleja al paletizar
+      var k = Math.max(1, 1.05 / camera.aspect);     // margen extra si es angosto
       d *= k;
       camera.position.set(d * 0.50, d * 0.44, d * 0.75);
       camera.lookAt(0, 0, 0);
     }
-    frameCamera(0);
+    frameCamera(0, 0);
 
     function resize() {
       var w = mount.clientWidth, h = mount.clientHeight;
@@ -221,9 +250,13 @@
     }
 
     function applyFold(p) {
-      var up    = seg(p, 0.04, 0.34); // levante de paredes
-      var minor = seg(p, 0.36, 0.58); // solapas menores
-      var major = seg(p, 0.60, 0.86); // solapas mayores
+      var up    = seg(p, 0.04, 0.30); // levante de paredes
+      // Entre 0.30 y 0.48 no se mueve nada: es la pausa en que la caja
+      // queda abierta. Sin ese respiro el armado y el cierre se leen
+      // como un solo gesto y se pierde el estado más importante.
+      var minor = seg(p, 0.48, 0.64); // solapas menores
+      var major = seg(p, 0.66, 0.82); // solapas mayores
+      var pile  = seg(p, 0.84, 1.00); // paletizado
 
       walls.forEach(function (w) {
         var a = w.dir * HALF * up;
@@ -235,11 +268,29 @@
         else w.flap.rotation.z = fa;
       });
 
+      // La caja armada cede el centro y toma su esquina del bloque
+      box.position.x = -HX * pile;
+      box.position.z = -HZ * pile;
+
+      // Paletizado: cada caja entra desde abajo, con retardo escalonado
+      mates.forEach(function (m) {
+        var t = seg(pile, m.userData.delay, m.userData.delay + 0.55);
+        m.visible = t > 0.001;
+        if (!m.visible) return;
+        var h = m.userData.home;
+        m.position.set(
+          h.x * t,
+          box.position.y + h.y - (1 - t) * 1.1,
+          h.z * t
+        );
+        m.scale.setScalar(0.6 + 0.4 * t);
+      });
+
       // Giro de presentación, lento y continuo
       pivot.rotation.y = -0.45 + p * 0.95;
-      pivot.rotation.x = 0.14 + (1 - up) * 0.20;
+      pivot.rotation.x = 0.14 + (1 - up) * 0.20 + pile * 0.10;
 
-      frameCamera(up);
+      frameCamera(up, pile);
     }
 
     /* ---------- Bucle ---------- */

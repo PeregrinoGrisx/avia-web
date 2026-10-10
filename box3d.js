@@ -12,7 +12,6 @@
 (function () {
   'use strict';
 
-  var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
 
   var mount = document.getElementById('box3d');
   if (!mount) return;
@@ -37,12 +36,7 @@
   var io = new IntersectionObserver(function (entries) {
     if (!entries[0].isIntersecting) return;
     io.disconnect();
-    var s = document.createElement('script');
-    s.src = THREE_URL;
-    s.async = true;
-    s.onload = start;
-    s.onerror = function () { mount.classList.add('is-failed'); };
-    document.head.appendChild(s);
+    window.aviaThree().then(start, function () { mount.classList.add('is-failed'); });
   }, { rootMargin: '300px' });
   io.observe(mount);
 

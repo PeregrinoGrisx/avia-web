@@ -7,6 +7,34 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ============================================================
+     Carga única de Three.js
+     ------------------------------------------------------------
+     Los dos visores 3D la pedían por su cuenta y la librería se
+     descargaba dos veces ("Multiple instances of Three.js").
+     Ahora comparten una sola promesa: el primero que la pide la
+     dispara, el segundo se cuelga de la misma.
+     ============================================================ */
+  var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  var threePromise = null;
+
+  window.aviaThree = function () {
+    if (threePromise) return threePromise;
+    threePromise = new Promise(function (resolve, reject) {
+      if (typeof window.THREE !== 'undefined') return resolve(window.THREE);
+      var s = document.createElement('script');
+      s.src = THREE_URL;
+      s.async = true;
+      s.onload = function () {
+        if (typeof window.THREE === 'undefined') reject(new Error('THREE ausente'));
+        else resolve(window.THREE);
+      };
+      s.onerror = function () { reject(new Error('No se pudo cargar Three.js')); };
+      document.head.appendChild(s);
+    });
+    return threePromise;
+  };
+
+  /* ============================================================
      Tema claro / oscuro
      ------------------------------------------------------------
      Por defecto oscuro: es el look principal de la marca, no una
