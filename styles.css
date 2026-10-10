@@ -28,6 +28,8 @@
 
   --teal:         #1DBCB1;   /* turquesa: separado del azul en tono y en brillo */
   --teal-300:     #5ED8CE;
+  --teal-deep:    #072E2C;   /* fondo de la sección turquesa */
+  --on-teal:      #04211F;   /* texto sobre turquesa sólido */
   --sand:         #C9A227;   /* arena */
   --sand-300:     #E0BE55;
   --sand-700:     #8A6D11;   /* arena legible sobre superficies claras */
@@ -113,6 +115,8 @@
   --brand-300:    #1A6EAC;
   --teal-300:     #0E8077;   /* los acentos se oscurecen para leerse sobre claro */
   --teal:         #0F9C92;
+  --teal-deep:    #E2F4F2;
+  --on-teal:      #FFFFFF;
   --sand-300:     #8F7212;
 
   --line-dark:    rgba(11,26,39,.12);
@@ -704,6 +708,34 @@ a{ color:inherit; }
 .step p{ font-size:.9rem; color:var(--tx-mid); margin:0; }
 
 /* ---------- Comparativa ---------- */
+/* ---------- Sección turquesa ----------
+   La comparativa es el momento del "resultado", que es justo lo que el
+   turquesa significa en esta paleta. Darle la sección completa lo saca
+   de ser un detalle de 2px y lo instala como segundo color de la marca. */
+.sec--teal{ background:var(--teal-deep); color:var(--tx-onDark); }
+.sec--teal h2{ color:var(--tx-strong); }
+.sec--teal .eyebrow{ color:var(--teal-300); }
+.sec--teal .sechead__sub{ color:var(--tx-light); }
+
+.sec--teal .comp__col{
+  background:rgba(255,255,255,.035); border-color:var(--line-dark);
+}
+/* Sobre el fondo menta claro, un blanco traslúcido no se despega */
+:root[data-theme="light"] .sec--teal .comp__col{ background:#fff; }
+.sec--teal .comp__col--a h3{ color:var(--tx-strong); }
+.sec--teal .comp__col--a .xs li{ color:var(--tx-light); }
+.sec--teal .comp__tag{ color:var(--tx-light); opacity:.7; }
+
+/* El lado bueno va en turquesa sólido: es el bloque que debe ganar */
+.sec--teal .comp__col--b{
+  background:var(--teal); border-color:var(--teal); color:var(--on-teal);
+}
+.sec--teal .comp__col--b h3,
+.sec--teal .comp__col--b .comp__tag--on{ color:var(--on-teal); }
+.sec--teal .comp__col--b .comp__tag--on{ opacity:.75; }
+.sec--teal .comp__col--b .ticks li{ color:var(--on-teal); opacity:.9; }
+.sec--teal .comp__col--b .ticks li::before{ border-color:var(--on-teal); }
+
 .comp{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 .comp__col{ padding:36px 34px 40px; border:1px solid var(--line-light); background:var(--paper-2); }
 .comp__col--b{ background:var(--ink); border-color:var(--ink); color:var(--tx-onDark); }
