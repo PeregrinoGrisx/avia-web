@@ -237,7 +237,14 @@ a{ color:inherit; }
 
 .nav__brand{ display:flex; align-items:center; gap:12px; text-decoration:none; flex:none; }
 .nav__logo{ height:26px; width:auto; transition:.35s var(--ease); }
+/* El logotipo tiene versión blanca y azul: se alterna según el tema,
+   porque el blanco desaparece sobre fondo claro y viceversa. */
 .nav__logo--dark{ display:none; }
+:root[data-theme="light"] .nav__logo--light{ display:none; }
+:root[data-theme="light"] .nav__logo--dark{ display:block; }
+.foot__logo--dark{ display:none; }
+:root[data-theme="light"] .foot__logo--light{ display:none; }
+:root[data-theme="light"] .foot__logo--dark{ display:block; }
 .nav__brandtxt{
   font-family:var(--ff-display); font-size:.6rem; font-weight:600;
   letter-spacing:.16em; text-transform:uppercase; line-height:1.3;

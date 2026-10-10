@@ -30,6 +30,57 @@ site/
 
 ---
 
+## La paleta
+
+Jorge pidió azul porque es lo del logo y la ropa institucional, pero nunca dijo que fuera
+el único color. Un sitio con un solo tono termina correcto y sin carácter, así que se
+suman dos acentos — **con rol asignado**, no decorativos:
+
+| Color | Hex | Rol | Por qué |
+|---|---|---|---|
+| **Azul AVIA** | `#1D78BC` | Identidad | Del logo y del uniforme. Manda en todo |
+| **Petróleo** | `#1F6F7A` | Continuidad y operación | Análogo al azul: lo acompaña sin competir. Marca *proceso corriendo* |
+| **Arena** | `#C9A227` | Atención | Complementario del azul, el contraste real. Nace del cartón y de la señalética de faena |
+
+**Dónde va cada uno.** Petróleo: barra de avance del armado, indicadores de etapa,
+columna "Con AVIA" de la comparativa, barra de progreso del proceso, rombos del marquee.
+Arena: numeración de la sección de desafíos, hover de esas tarjetas, y las marcas
+negativas de la columna "Sin AVIA" (donde reemplazó un rojo suelto que estaba fuera
+de sistema).
+
+**El reparto es lo que sostiene la propuesta: ~90% azules y neutros, ~7% petróleo,
+~3% arena.** Si se usan parejo aparecen los "colores fuertes" que Jorge descartó.
+
+La paleta además sigue el relato del sitio: **desafío (arena) → modelo AVIA (azul) →
+resultado (petróleo)**. No son dos colores sueltos, son los tres momentos del argumento.
+
+## Modo claro y oscuro
+
+Selector de dos estados en el nav y en el menú móvil, con el modo activo marcado.
+Por defecto **oscuro**, porque es el look de marca y no una preferencia del sistema;
+la elección se guarda y se aplica antes de pintar para que no parpadee al cargar.
+
+El claro **no es el oscuro invertido**. Mantiene la misma alternancia de bandas usando
+tres tonos claros (`--ink` / `--paper` / `--paper-2`) en vez de oscuro contra claro, y las
+tarjetas pasan a blanco para destacar igual que en oscuro destacan por ser más claras
+que el fondo. Los acentos se oscurecen para conservar contraste sobre fondo claro.
+
+Todo el color está tokenizado en `:root`; el bloque `:root[data-theme="light"]` solo
+redefine valores. Para cambiar un tema no hay que tocar componentes.
+
+## El armado por scroll (`foldbox.js`)
+
+Sección entre el marquee y "El desafío". La caja se construye desde la plancha
+troquelada — paredes, solapas menores, solapas mayores — y **el avance lo manda el
+scroll**, así que bajar la arma y subir la desarma.
+
+Técnicamente: cada panel cuelga de un grupo colocado en su línea de plegado, de modo
+que rota sobre el pliegue y no sobre su centro. Las solapas son hijas de su pared, así
+que la acompañan sin cálculos extra. La cámara se aleja en la plancha y se acerca en la
+caja cerrada, porque la plancha extendida mide más del doble.
+
+⚠️ **La geometría es un RSC genérico.** Reemplazar por el troquel real de AVIA.
+
 ## Decisiones de diseño (y de dónde salen)
 
 | Decisión | Origen en el brief |
@@ -142,7 +193,7 @@ procedural por un visor de secuencia fotográfica; con la 6, cargar un GLB real.
 
 ### Datos a confirmar con el cliente
 - [ ] **Cifras de los KPIs**: están con valores de referencia (`+12` plantas, `+80` personas, `98%` disponibilidad). Solo `+6 años` sale del brief. Hay que reemplazarlas o quitar el bloque.
-- [ ] **Teléfono**: el brief no lo trae. Está como `+56 9 0000 0000` en nav, contacto y footer.
+- [x] ~~Teléfono~~: recuperado del sitio actual (`+56 9 4356 7890`). **Confirmar con Jorge** que sea el correcto y no del tema de WordPress.
 - [ ] **Rendimientos de los equipos** (cajas/min por formato): son valores plausibles de la industria, no datos de AVIA. Confirmar o quitar la fila.
 - [ ] **Redes sociales**: sin responder en el brief. No hay enlaces en el footer todavía.
 - [ ] **Regiones de cobertura** reales (hoy dice "a lo largo de Chile").

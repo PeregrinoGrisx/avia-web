@@ -93,6 +93,8 @@
       hemi.groundColor.setHex(light ? 0xdce6ee : 0x16222e);
       hemi.intensity = light ? 0.62 : 0.30;
       rim.intensity = light ? 0.42 : 0.70;
+      cardboard.color.setHex(light ? 0x6E767C : 0x8C9195);
+      cardboardIn.color.setHex(light ? 0x525A60 : 0x6B7175);
     }
     document.addEventListener('avia:theme', function (e) { syncTheme(e.detail.mode); });
 
