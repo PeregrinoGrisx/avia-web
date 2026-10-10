@@ -26,8 +26,8 @@
   --brand-300:    #58A6DE;
   --brand-100:    #D7E9F7;
 
-  --teal:         #1F6F7A;   /* petróleo */
-  --teal-300:     #4FA3AE;
+  --teal:         #1DBCB1;   /* turquesa: separado del azul en tono y en brillo */
+  --teal-300:     #5ED8CE;
   --sand:         #C9A227;   /* arena */
   --sand-300:     #E0BE55;
   --sand-700:     #8A6D11;   /* arena legible sobre superficies claras */
@@ -111,7 +111,8 @@
   --tx-mid:       #46606F;
 
   --brand-300:    #1A6EAC;
-  --teal-300:     #1A6670;   /* los acentos se oscurecen para leerse sobre claro */
+  --teal-300:     #0E8077;   /* los acentos se oscurecen para leerse sobre claro */
+  --teal:         #0F9C92;
   --sand-300:     #8F7212;
 
   --line-dark:    rgba(11,26,39,.12);
@@ -452,16 +453,26 @@ a{ color:inherit; }
   background:radial-gradient(ellipse 60% 60% at 30% 45%, var(--glow), transparent 70%);
   pointer-events:none;
 }
+/* El lienzo ocupa toda la sección. Antes era un cuadrado de 640px y la
+   caja se salía de él al crecer; con el fondo completo tiene espacio
+   para agrandarse sin recortes. El texto va encima, sobre un velo que
+   garantiza su legibilidad. */
+.fold__canvas{ position:absolute; inset:0; z-index:0; }
+.fold__canvas canvas{ width:100%!important; height:100%!important; display:block; }
+
+.fold__veil{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(90deg, transparent 32%, color-mix(in srgb, var(--ink) 88%, transparent) 54%, var(--ink) 66%);
+}
+
 .fold__grid{
-  position:relative; display:grid; grid-template-columns:1.18fr .82fr;
+  position:relative; z-index:2; display:grid; grid-template-columns:1fr 1fr;
   gap:56px; align-items:center;
 }
-.fold__stage{ position:relative; }
-.fold__canvas{
-  width:100%; aspect-ratio:1/1; max-width:640px; margin-inline:auto;
-}
-.fold__canvas canvas{ width:100%!important; height:100%!important; display:block; }
+.fold__copy{ grid-column:2; }
+
 .fold__hint{
+  position:absolute; z-index:2; left:0; bottom:26px; width:42%;
   text-align:center; margin:0; font-family:var(--ff-display);
   font-size:.7rem; font-weight:500; letter-spacing:.12em;
   text-transform:uppercase; color:var(--tx-light); opacity:.45;
@@ -618,9 +629,12 @@ a{ color:inherit; }
   background:var(--ink-2); border:1px solid var(--line-dark);
   min-height:480px;
 }
+/* Columna en vez de capas absolutas: la pista de arrastre y el pie de
+   medidas estaban ambos anclados al fondo y se montaban uno sobre otro. */
 .boxes__art{
   position:relative; border-right:1px solid var(--line-dark);
-  display:flex; align-items:center; justify-content:center; padding:20px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; padding:20px;
   background:
     radial-gradient(circle at 50% 45%, rgba(29,120,188,.16), transparent 62%),
     repeating-linear-gradient(135deg, var(--stripe) 0 2px, transparent 2px 12px);
@@ -634,7 +648,7 @@ a{ color:inherit; }
 .box3d.is-3d .boxsvg{ display:none; }
 
 .box3d__hint{
-  position:absolute; bottom:14px; left:0; right:0; margin:0;
+  margin:0;
   display:flex; align-items:center; justify-content:center; gap:7px;
   font-family:var(--ff-display); font-size:.7rem; font-weight:500;
   letter-spacing:.1em; text-transform:uppercase; color:var(--tx-light);
@@ -656,7 +670,7 @@ a{ color:inherit; }
 }
 @keyframes draw{ from{ stroke-dashoffset:1200; opacity:.2 } to{ stroke-dashoffset:0; opacity:1 } }
 .boxes__dims{
-  position:absolute; bottom:18px; left:0; right:0; text-align:center;
+  text-align:center;
   font-family:var(--ff-display); font-size:.72rem; font-weight:500;
   letter-spacing:.1em; text-transform:uppercase; color:var(--tx-light); opacity:.65;
 }
@@ -866,8 +880,13 @@ a{ color:inherit; }
   .comp{ grid-template-columns:1fr; }
   .fold{ height:380vh; }
   .fold__dots{ grid-template-columns:repeat(3,1fr); gap:12px 10px; }
-  .fold__grid{ grid-template-columns:1fr; gap:24px; }
-  .fold__canvas{ max-width:340px; }
+  /* En vertical la caja ocupa arriba y el texto se apoya abajo,
+     así que el velo pasa a ser horizontal. */
+  .fold__grid{ grid-template-columns:1fr; gap:24px; align-items:end; }
+  .fold__copy{ grid-column:1; }
+  .fold__veil{ background:linear-gradient(180deg, transparent 28%, var(--ink) 62%); }
+  .fold__sticky{ align-items:flex-end; padding-bottom:38px; }
+  .fold__hint{ width:100%; bottom:10px; }
   .fold__text{ min-height:4.6em; }
   .fold__foot{ display:none; }
 }

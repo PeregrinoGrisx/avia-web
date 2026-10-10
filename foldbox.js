@@ -237,11 +237,14 @@
        cuadro, el cierre se mira a tamaño normal y el pallet pide alejarse.
        Claves en (avance, distancia), interpoladas suave.                */
     var DOLLY = [
-      [0.00, 4.60],   // plancha: cabe entera
-      [0.30, 2.62],   // caja abierta: domina la pantalla
-      [0.48, 2.62],   // se mantiene mientras está abierta
-      [0.68, 3.20],   // retrocede para mostrar el cierre completo
-      [1.00, 5.60]    // pallet
+      [0.00, 6.10],   // plancha: cabe entera
+      [0.16, 5.20],   // paredes a medio abrir: es la silueta más alta
+                      // de toda la secuencia, con las solapas aún
+                      // extendidas en prolongación de cada cara
+      [0.32, 3.15],   // caja abierta: domina la pantalla pero cabe entera
+      [0.48, 3.15],   // se mantiene mientras está abierta
+      [0.68, 3.55],   // retrocede para mostrar el cierre completo
+      [1.00, 5.80]    // pallet
     ];
 
     function dolly(p) {
@@ -269,6 +272,14 @@
       if (!w || !h) return;
       renderer.setSize(w, h);
       camera.aspect = w / h;
+
+      // El lienzo cubre toda la sección, pero el texto vive en la mitad
+      // derecha. setViewOffset corre la ventana de render hacia la
+      // derecha, con lo que la caja aparece desplazada a la izquierda,
+      // sin tocar el ángulo de cámara ni deformar la perspectiva.
+      if (w >= 960) camera.setViewOffset(w, h, w * 0.15, 0, w, h);
+      else camera.clearViewOffset();
+
       camera.updateProjectionMatrix();
     }
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(mount);

@@ -16,7 +16,7 @@
 document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}
 catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
 </script>
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 
@@ -187,12 +187,11 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
 <!-- ============ ARMADO POR SCROLL ============ -->
 <section class="fold" id="armado">
   <div class="fold__sticky">
-    <div class="wrap fold__grid">
-      <div class="fold__stage">
-        <div class="fold__canvas" id="foldbox"></div>
-        <p class="fold__hint">Desplázate para armar la caja</p>
-      </div>
+    <!-- El lienzo ocupa toda la sección; el texto va encima -->
+    <div class="fold__canvas" id="foldbox"></div>
+    <div class="fold__veil" aria-hidden="true"></div>
 
+    <div class="wrap fold__grid">
       <div class="fold__copy">
         <p class="eyebrow eyebrow--teal">El proceso, paso a paso</p>
         <h2 id="foldTitle">Plancha troquelada</h2>
@@ -218,6 +217,8 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
         </p>
       </div>
     </div>
+
+    <p class="fold__hint">Desplázate para armar la caja</p>
   </div>
 </section>
 
@@ -694,6 +695,6 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
 
 <script src="script.js?v=7"></script>
 <script src="box3d.js?v=7"></script>
-<script src="foldbox.js?v=12"></script>
+<script src="foldbox.js?v=16"></script>
 </body>
 </html>
