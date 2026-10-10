@@ -182,15 +182,24 @@
        En el último tramo la caja deja de estar sola: aparecen otras
        cinco y se arma una capa de pallet. Son cajas cerradas simples,
        no necesitan el aparejo de pliegues.                            */
+    // Aristas dibujadas: sin ellas las caras coplanares de cajas vecinas
+    // se funden y el pallet se ve como un bloque sin forma.
+    var edgeMat = new THREE.LineBasicMaterial({ color: 0x3C464D, transparent: true, opacity: 0.85 });
+
     var mates = [];
-    var GAP = 0.02;
+    var GAP = 0.055;
     var HX = (BW + GAP) / 2, HZ = (BD + GAP) / 2, LY = BH + GAP;
 
     // Bloque 2×2 en la base y dos cajas encima. Una disposición en cruz
     // se lee como un racimo suelto; un bloque compacto se lee como carga.
     // La caja recién armada ocupa la esquina (-HX,-HZ): durante este tramo
     // se desplaza hasta ahí para que el conjunto quede centrado en cuadro.
+    // El primero de la lista ocupa la esquina de la caja recién armada:
+    // en el paletizado la reemplaza, para que las seis sean idénticas y
+    // todas lleven aristas. El cambio es invisible porque ambas son la
+    // misma caja cerrada en la misma posición.
     var LAYOUT = [
+      [-HX, 0,  -HZ],
       [ HX, 0,  -HZ], [-HX, 0,   HZ], [ HX, 0,  HZ],
       [-HX, LY, -HZ], [ HX, LY,  HZ]
     ];
@@ -199,10 +208,16 @@
     // hay que subirlas ese medio alto o se hunden bajo el resto.
     var BASE_Y = BH / 2;
 
+    var mateGeo = new THREE.BoxGeometry(BW, BH, BD);
+    var mateEdges = new THREE.EdgesGeometry(mateGeo);
+
     LAYOUT.forEach(function (pos, i) {
-      var m = new THREE.Mesh(new THREE.BoxGeometry(BW, BH, BD), card);
+      var m = new THREE.Mesh(mateGeo, card);
+      m.add(new THREE.LineSegments(mateEdges, edgeMat));
       m.userData.home = new THREE.Vector3(pos[0], BASE_Y + pos[1], pos[2]);
-      m.userData.delay = i * 0.08;
+      // La que sustituye a la caja armada entra sin retardo y sin caída
+      m.userData.swap = (i === 0);
+      m.userData.delay = i === 0 ? 0 : (i - 1) * 0.09;
       m.visible = false;
       mates.push(m);
     });
@@ -217,17 +232,37 @@
        La plancha extendida mide más del doble que la caja armada, así que
        la cámara parte lejos y se acerca a medida que se pliega. Con una
        distancia fija, o se corta la plancha o la caja queda diminuta.     */
-    var D_FLAT = 4.5, D_BOX = 3.0, D_PILE = 5.4;
+    /* La distancia de cámara es su propia coreografía, independiente de
+       los pliegues: la plancha necesita aire, la caja abierta llena el
+       cuadro, el cierre se mira a tamaño normal y el pallet pide alejarse.
+       Claves en (avance, distancia), interpoladas suave.                */
+    var DOLLY = [
+      [0.00, 4.60],   // plancha: cabe entera
+      [0.30, 2.62],   // caja abierta: domina la pantalla
+      [0.48, 2.62],   // se mantiene mientras está abierta
+      [0.68, 3.20],   // retrocede para mostrar el cierre completo
+      [1.00, 5.60]    // pallet
+    ];
 
-    function frameCamera(up, pile) {
-      var d = D_FLAT + (D_BOX - D_FLAT) * up;        // se acerca al plegar
-      d = d + (D_PILE - d) * (pile || 0);            // y se aleja al paletizar
-      var k = Math.max(1, 1.05 / camera.aspect);     // margen extra si es angosto
-      d *= k;
+    function dolly(p) {
+      for (var i = 1; i < DOLLY.length; i++) {
+        if (p > DOLLY[i][0] && i < DOLLY.length - 1) continue;
+        var a = DOLLY[i - 1], b = DOLLY[i];
+        var t = (p - a[0]) / (b[0] - a[0]);
+        t = t < 0 ? 0 : t > 1 ? 1 : t;
+        t = t * t * (3 - 2 * t);
+        return a[1] + (b[1] - a[1]) * t;
+      }
+      return DOLLY[0][1];
+    }
+
+    function frameCamera(p) {
+      var d = dolly(p);
+      d *= Math.max(1, 1.05 / camera.aspect); // margen extra si es angosto
       camera.position.set(d * 0.50, d * 0.44, d * 0.75);
       camera.lookAt(0, 0, 0);
     }
-    frameCamera(0, 0);
+    frameCamera(0);
 
     function resize() {
       var w = mount.clientWidth, h = mount.clientHeight;
@@ -272,17 +307,26 @@
       box.position.x = -HX * pile;
       box.position.z = -HZ * pile;
 
-      // Paletizado: cada caja entra desde abajo, con retardo escalonado
+      // Una vez iniciado el paletizado, la caja armada se releva por su
+      // gemela con aristas para que las seis se lean igual
+      var swapped = pile > 0.015;
+      box.visible = !swapped;
+
       mates.forEach(function (m) {
-        var t = seg(pile, m.userData.delay, m.userData.delay + 0.55);
+        if (m.userData.swap) {
+          m.visible = swapped;
+          if (swapped) {
+            m.position.set(-HX * pile, box.position.y + m.userData.home.y, -HZ * pile);
+            m.scale.setScalar(1);
+          }
+          return;
+        }
+        // Las demás entran desde abajo, con retardo escalonado
+        var t = seg(pile, m.userData.delay, m.userData.delay + 0.5);
         m.visible = t > 0.001;
         if (!m.visible) return;
         var h = m.userData.home;
-        m.position.set(
-          h.x * t,
-          box.position.y + h.y - (1 - t) * 1.1,
-          h.z * t
-        );
+        m.position.set(h.x * t, box.position.y + h.y - (1 - t) * 1.1, h.z * t);
         m.scale.setScalar(0.6 + 0.4 * t);
       });
 
@@ -290,7 +334,7 @@
       pivot.rotation.y = -0.45 + p * 0.95;
       pivot.rotation.x = 0.14 + (1 - up) * 0.20 + pile * 0.10;
 
-      frameCamera(up, pile);
+      frameCamera(p);
     }
 
     /* ---------- Bucle ---------- */
