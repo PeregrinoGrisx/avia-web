@@ -688,6 +688,44 @@ a{ color:inherit; }
 }
 .boxes__specs dd{ margin:0; font-size:.88rem; color:var(--tx-light); line-height:1.45; }
 
+/* ---------- Ficha del equipo ----------
+   Datos duros, sin adornos: es lo que separa a AVIA de un proveedor
+   que solo dice "tenemos equipos". La foto queda pendiente del cliente;
+   no se usa el render del catálogo del fabricante porque esa no es la
+   máquina de AVIA, y el sitio se cae justo por ahí. */
+.machine{
+  margin-top:20px; display:grid; grid-template-columns:.78fr 1.22fr;
+  background:var(--ink-2); border:1px solid var(--line-dark);
+}
+.machine__media{ padding:22px; border-right:1px solid var(--line-dark); }
+.machine__media .mediaslot{ height:100%; min-height:300px; }
+.machine__info{ padding:36px 40px 40px; }
+.machine__info h3{ font-size:1.55rem; margin-bottom:12px; }
+.machine__lede{ font-size:.98rem; max-width:62ch; margin-bottom:28px; }
+
+.machine__specs{
+  margin:0 0 26px; display:grid; grid-template-columns:repeat(2,1fr); gap:18px 32px;
+}
+.machine__specs div{ border-left:2px solid rgba(29,188,177,.35); padding-left:14px; }
+.machine__specs dt{
+  font-family:var(--ff-display); font-size:.66rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:3px;
+}
+.machine__specs dd{ margin:0; font-size:.88rem; color:var(--tx-light); line-height:1.45; }
+.machine__extras{ margin-bottom:24px; }
+.machine__note{
+  margin:0; padding-left:16px; border-left:3px solid var(--teal);
+  font-size:.9rem; color:var(--tx-light); max-width:60ch;
+}
+
+@media (max-width:960px){
+  .machine{ grid-template-columns:1fr; }
+  .machine__media{ border-right:0; border-bottom:1px solid var(--line-dark); }
+  .machine__media .mediaslot{ min-height:220px; aspect-ratio:16/9; }
+  .machine__info{ padding:28px 24px 32px; }
+  .machine__specs{ grid-template-columns:1fr; gap:16px; }
+}
+
 /* ---------- Proceso ---------- */
 .steps{
   list-style:none; margin:0; padding:0;
