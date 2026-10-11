@@ -21,7 +21,7 @@
    ============================================================ */
 window.AVIA_BOXES = {
   c1: {
-    kicker: 'Estructura base',
+    kicker: 'Formato habitual',
     title: 'Caja C-1',
     desc: 'La estructura de bandeja más básica y una de las más usadas del mercado, sobre todo por su aprovechamiento del cartón: la plancha rinde más que en cualquier otro formato.',
     use: 'Fruta y hortaliza de exportación, uso general',
@@ -65,7 +65,7 @@ window.AVIA_BOXES = {
   },
 
   p84: {
-    kicker: 'Hortofrutícola',
+    kicker: 'Formato habitual',
     title: 'Caja P-84®',
     desc: 'Otro de los formatos más populares del sector. Como la Citrus Box, su diferencia principal está en el tipo de apilamiento: Defor®, EasyStack, Traptab.',
     use: 'Fruta de exportación, alto apilado',

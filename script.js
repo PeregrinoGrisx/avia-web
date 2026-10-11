@@ -181,7 +181,7 @@
       setBox(tab.dataset.box);
     });
   });
-  setBox('c1');
+  setBox('p84');
 
   /* ============================================================
      Formulario de contacto (demo — falta conectar al backend)

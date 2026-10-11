@@ -199,13 +199,52 @@ Queda por confirmar con Jorge:
 3. Medidas típicas de bandeja por formato.
 4. ¿Trabajan alguna variante de apilamiento (Defor, EasyStack, Traptab)?
 
-### Datos a confirmar con el cliente
-- [ ] **Cifras de los KPIs**: están con valores de referencia (`+12` plantas, `+80` personas, `98%` disponibilidad). Solo `+6 años` sale del brief. Hay que reemplazarlas o quitar el bloque.
-- [x] ~~Teléfono~~: recuperado del sitio actual (`+56 9 4356 7890`). **Confirmar con Jorge** que sea el correcto y no del tema de WordPress.
-- [ ] **Rendimientos de los equipos** (cajas/min por formato): son valores plausibles de la industria, no datos de AVIA. Confirmar o quitar la fila.
-- [ ] **Redes sociales**: sin responder en el brief. No hay enlaces en el footer todavía.
-- [ ] **Regiones de cobertura** reales (hoy dice "a lo largo de Chile").
-- [ ] **Clientes / logos** para la franja de confianza (si pueden mostrarse).
+### Respuestas del cliente (11-10-2026, "Preguntas Avia.docx")
+
+Jorge respondió casi todo. Lo aplicado al sitio:
+
+| Dato | Respuesta | Estado |
+|---|---|---|
+| Plantas | 5 en operación directa, más equipos arrendados en otras 2 con contrato de un tercero | Se publica **5**, que es lo defendible |
+| Dotación | 60+ personas | **+60** |
+| Equipos | **4** formadoras Boix Q-1530 | Reemplaza al KPI de disponibilidad |
+| Teléfono | +56 9 6654 4150 | Aplicado en nav, contacto y pie |
+| Correo formularios | administracionac.cl | Aplicado |
+| Redes sociales | No tienen, solo web | No se agregan |
+| Cobertura | Séptima a Octava región | Maule y Biobío |
+| Formatos que arman | **P-84, C-1 y maleta** | P-84 queda por defecto |
+| Apilamiento | Apilador AR-5, EasyStack | En la ficha del equipo |
+| Mensaje central | Aprobado | Sin cambios |
+| Aprobación final | Jorge | — |
+
+**Rangos dimensionales de la Q-1530** (hoja del fabricante que adjuntó):
+
+| | Mínimo | Máximo |
+|---|---|---|
+| Caja formada (A×B×C) | 300 × 200 × 70 mm | 600 × 600 × 250 mm |
+| Plancha (A×B) | 480 × 350 mm | 1.300 × 1.100 mm |
+
+Cajas bajo 100 mm de altura requieren kit de caja baja, y la relación entre base y
+altura depende de la plancha disponible. Ambas notas están en el sitio.
+
+**No se publican los logos de terceros.** Jorge confirmó que no tiene autorización
+formal de Agrosuper ni de Servipag, así que quedan fuera hasta que la consiga.
+
+**SEC es acreditación, no cliente.** Tienen técnicos con certificación SEC, exigida por
+normativa para trabajo eléctrico. Se comunica como credencial en el servicio de
+mantenimiento integral y en las preguntas frecuentes.
+
+**Fotografía:** confirmó que las del sitio actual son genéricas, que puede gestionar una
+sesión en planta y que podría conseguir planos o modelo 3D del proveedor del equipo.
+
+### Sigue pendiente de Jorge
+
+1. **Casos concretos** — dejó la pregunta en blanco. Es el mayor aporte comercial que falta.
+2. **Formato "maleta"** — no está en el catálogo Boix. ¿A qué formato corresponde? Sin eso no lo puedo modelar.
+3. **Medidas típicas por formato** — respondió con los rangos de la máquina, no con las medidas que usan habitualmente.
+4. **Qué otros equipos armadores operan** — respondió "cualquiera", conviene concretar.
+5. **Indicador de cumplimiento** — mencionó disponibilidad del servicio y cantidad de cajas, pero sin cifra ni registro asociado.
+6. Fotografías y, si se consigue, el modelo 3D del equipo.
 
 ### Fotografía
 El cliente no tiene fotos ("habría que conseguirlas"). Hay 2 *slots* marcados en el sitio:
