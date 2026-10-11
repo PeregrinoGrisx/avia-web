@@ -16,7 +16,7 @@
 document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}
 catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
 </script>
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
 
@@ -203,10 +203,9 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
         <ol class="fold__dots">
           <li class="fold__dot is-on"><b>01</b><span>Plancha</span></li>
           <li class="fold__dot"><b>02</b><span>Paredes</span></li>
-          <li class="fold__dot"><b>03</b><span>Abierta</span></li>
-          <li class="fold__dot"><b>04</b><span>Solapas</span></li>
-          <li class="fold__dot"><b>05</b><span>Cerrada</span></li>
-          <li class="fold__dot"><b>06</b><span>Pallet</span></li>
+          <li class="fold__dot"><b>03</b><span>Esquinas</span></li>
+          <li class="fold__dot"><b>04</b><span>Formada</span></li>
+          <li class="fold__dot"><b>05</b><span>Pallet</span></li>
         </ol>
 
         <div class="fold__bar"><i id="foldBar"></i></div>
@@ -393,26 +392,24 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
       <p class="eyebrow">Equipos y formatos</p>
       <h2>Armamos la caja que tu producto necesita</h2>
       <p class="sechead__sub">
-        Trabajamos con los formatos más usados en la industria nacional. Selecciona uno
-        para ver el detalle del armado y los equipos asociados.
+        Operamos formadoras <strong>Boix Quality Q-1530</strong>, que montan seis formatos
+        de bandeja hortofrutícola con solo cambiar el kit. Selecciona uno para ver el detalle.
       </p>
     </header>
 
     <div class="boxes reveal">
       <div class="boxes__tabs" role="tablist" aria-label="Formatos de caja">
-        <button class="boxtab is-active" role="tab" aria-selected="true" data-box="rsc">Caja americana (RSC)</button>
-        <button class="boxtab" role="tab" aria-selected="false" data-box="tray">Bandeja / Tray</button>
-        <button class="boxtab" role="tab" aria-selected="false" data-box="die">Troquelada</button>
-        <button class="boxtab" role="tab" aria-selected="false" data-box="lid">Caja con tapa</button>
-        <button class="boxtab" role="tab" aria-selected="false" data-box="display">Display</button>
+        <button class="boxtab is-active" role="tab" aria-selected="true" data-box="c1">C-1</button>
+        <button class="boxtab" role="tab" aria-selected="false" data-box="citrus">Citrus Box</button>
+        <button class="boxtab" role="tab" aria-selected="false" data-box="columna">Columna abierta</button>
+        <button class="boxtab" role="tab" aria-selected="false" data-box="plaform">Plaform®</button>
+        <button class="boxtab" role="tab" aria-selected="false" data-box="p84">P-84®</button>
+        <button class="boxtab" role="tab" aria-selected="false" data-box="bigear">Big Ear</button>
       </div>
 
       <div class="boxes__panel cut">
         <div class="boxes__art">
           <div class="box3d" id="box3d" role="img" aria-label="Modelo tridimensional del formato de caja seleccionado">
-            <svg viewBox="0 0 320 260" class="boxsvg" id="boxsvg" aria-hidden="true">
-              <g id="boxShape" fill="none" stroke="#58A6DE" stroke-width="2" stroke-linejoin="round"></g>
-            </svg>
           </div>
           <p class="box3d__hint" id="box3dHint" aria-hidden="true">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 L4 12 L8 17 M16 7 L20 12 L16 17"/></svg>
@@ -422,13 +419,13 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
         </div>
         <div class="boxes__info">
           <p class="eyebrow" id="boxKicker">Formato</p>
-          <h3 id="boxTitle">Caja americana (RSC)</h3>
-          <p id="boxDesc">El formato de mayor uso en exportación y distribución. Cuatro solapas superiores e inferiores que se unen al centro.</p>
+          <h3 id="boxTitle">Caja C-1</h3>
+          <p id="boxDesc">La estructura de bandeja más básica y una de las más usadas, por su desarrollo y aprovechamiento del cartón.</p>
           <dl class="boxes__specs">
             <div><dt>Uso habitual</dt><dd id="boxUse">—</dd></div>
-            <div><dt>Equipo asociado</dt><dd id="boxEq">—</dd></div>
-            <div><dt>Cierre</dt><dd id="boxClose">—</dd></div>
-            <div><dt>Rendimiento referencial</dt><dd id="boxRate">—</dd></div>
+            <div><dt>Estructura</dt><dd id="boxStruct">—</dd></div>
+            <div><dt>Formadora</dt><dd id="boxEq">—</dd></div>
+            <div><dt>Producción</dt><dd id="boxRate">—</dd></div>
           </dl>
           <a class="btn btn--primary" href="#contacto">Consultar disponibilidad</a>
         </div>
@@ -693,8 +690,9 @@ catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
   </div>
 </footer>
 
-<script src="script.js?v=7"></script>
-<script src="box3d.js?v=7"></script>
-<script src="foldbox.js?v=16"></script>
+<script src="boxdata.js?v=1"></script>
+<script src="script.js?v=8"></script>
+<script src="box3d.js?v=8"></script>
+<script src="foldbox.js?v=17"></script>
 </body>
 </html>

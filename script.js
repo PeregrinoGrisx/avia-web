@@ -149,106 +149,9 @@
     sections.forEach(function (s) { sio.observe(s); });
   }
 
-  /* ============================================================
-     Formatos de caja — selector interactivo
-     ============================================================ */
-  var BOXES = {
-    rsc: {
-      kicker: 'Formato estándar',
-      title: 'Caja americana (RSC)',
-      desc: 'El formato de mayor uso en exportación y distribución. Cuatro solapas superiores e inferiores que se unen al centro, con buen comportamiento de apilado.',
-      use: 'Fruta de exportación, alimentos, distribución general',
-      eq: 'Armadora de fondo + sellado con cinta o cola',
-      close: 'Cinta adhesiva, cola caliente o grapa',
-      rate: 'Hasta 15 cajas/min según formato',
-      dims: 'Largo × Ancho × Alto · solapas iguales',
-      draw: function () {
-        return '' +
-          '<path d="M70 150 L160 196 L250 150 L160 104 Z"/>' +
-          '<path d="M70 150 V88 L160 42 L250 88 V150"/>' +
-          '<path d="M160 104 V42"/>' +
-          '<path d="M70 88 L160 134 L250 88" stroke-opacity=".45"/>' +
-          '<path d="M160 134 V196" stroke-opacity=".45"/>' +
-          '<path d="M78 72 L160 30 L242 72" stroke-opacity=".6" stroke-dasharray="5 5"/>';
-      }
-    },
-    tray: {
-      kicker: 'Formato bajo',
-      title: 'Bandeja / Tray',
-      desc: 'Caja de baja altura, abierta o con tapa separada. Muy usada en agroindustria para fruta de calibre y en retail para exhibición directa en góndola.',
-      use: 'Fruta fresca, berries, hortalizas, retail ready',
-      eq: 'Formadora de bandejas con pegado de esquinas',
-      close: 'Esquinas pegadas o grapadas, sin tapa',
-      rate: 'Hasta 25 bandejas/min según formato',
-      dims: 'Altura baja · esquinas pegadas',
-      draw: function () {
-        return '' +
-          '<path d="M60 160 L160 208 L260 160 L160 112 Z"/>' +
-          '<path d="M60 160 V122 L160 74 L260 122 V160"/>' +
-          '<path d="M160 112 V74"/>' +
-          '<path d="M76 114 L160 72 L244 114" stroke-opacity=".45"/>' +
-          '<path d="M86 100 L160 64 L234 100" stroke-opacity=".5" stroke-dasharray="5 5"/>';
-      }
-    },
-    die: {
-      kicker: 'Formato especial',
-      title: 'Caja troquelada',
-      desc: 'Corte a medida para productos con requerimientos específicos de ventilación, encaje o presentación. Permite geometrías que la caja estándar no resuelve.',
-      use: 'Productos de alto valor, formatos con ventilación',
-      eq: 'Formadora configurada para troquel específico',
-      close: 'Autoarmable, encaje o pegado según diseño',
-      rate: 'Variable según complejidad del troquel',
-      dims: 'Geometría a medida · troquel propio',
-      draw: function () {
-        return '' +
-          '<path d="M70 158 L160 202 L250 158 L160 114 Z"/>' +
-          '<path d="M70 158 V96 L160 52 L250 96 V158"/>' +
-          '<path d="M160 114 V52"/>' +
-          '<path d="M96 124 h26 v-16 h-26 z" stroke-opacity=".7"/>' +
-          '<path d="M198 124 h26 v-16 h-26 z" stroke-opacity=".7"/>' +
-          '<path d="M120 86 L160 64 L200 86" stroke-opacity=".5" stroke-dasharray="4 4"/>';
-      }
-    },
-    lid: {
-      kicker: 'Formato con tapa',
-      title: 'Caja con tapa independiente',
-      desc: 'Base y tapa separadas, ideal cuando el producto se inspecciona o se repone en destino. Buena resistencia al apilado y presentación cuidada.',
-      use: 'Exportación de calibre, productos premium',
-      eq: 'Formadora de base + formadora de tapa',
-      close: 'Tapa telescópica, sin cinta visible',
-      rate: 'Hasta 12 sets/min según formato',
-      dims: 'Base + tapa telescópica',
-      draw: function () {
-        return '' +
-          '<path d="M70 170 L160 214 L250 170 L160 126 Z"/>' +
-          '<path d="M70 170 V126 L160 82 L250 126 V170"/>' +
-          '<path d="M160 126 V82"/>' +
-          '<path d="M64 76 L160 30 L256 76 L160 122 Z" stroke-opacity=".6"/>' +
-          '<path d="M64 76 V60 M256 76 V60 M160 122 V106" stroke-opacity=".6"/>';
-      }
-    },
-    display: {
-      kicker: 'Punto de venta',
-      title: 'Caja display',
-      desc: 'Caja preparada para abrirse en sala y funcionar como exhibidor. Reduce la manipulación en tienda y mejora la rotación del producto.',
-      use: 'Retail, promociones, productos de alta rotación',
-      eq: 'Formadora con módulo de pre-corte',
-      close: 'Pre-corte perimetral, apertura sin herramienta',
-      rate: 'Hasta 18 cajas/min según formato',
-      dims: 'Pre-corte de apertura · frente abatible',
-      draw: function () {
-        return '' +
-          '<path d="M70 164 L160 208 L250 164 L160 120 Z"/>' +
-          '<path d="M70 164 V102 L160 58 L250 102 V164"/>' +
-          '<path d="M160 120 V58"/>' +
-          '<path d="M70 132 L160 176 L250 132" stroke-opacity=".8" stroke-dasharray="6 5"/>' +
-          '<path d="M100 150 L160 180 L220 150" stroke-opacity=".45"/>';
-      }
-    }
-  };
+  /* El catálogo de formatos vive en boxdata.js, compartido con el visor 3D */
+  var BOXES = window.AVIA_BOXES || {};
 
-  var shape = document.getElementById('boxShape');
-  var svg = document.getElementById('boxsvg');
   var tabs = document.querySelectorAll('.boxtab');
 
   function setBox(key) {
@@ -258,16 +161,10 @@
     document.getElementById('boxTitle').textContent = b.title;
     document.getElementById('boxDesc').textContent = b.desc;
     document.getElementById('boxUse').textContent = b.use;
-    document.getElementById('boxEq').textContent = b.eq;
-    document.getElementById('boxClose').textContent = b.close;
+    document.getElementById('boxStruct').textContent = b.struct;
+    document.getElementById('boxEq').textContent = (window.AVIA_MACHINE || {}).name || '—';
     document.getElementById('boxRate').textContent = b.rate;
     document.getElementById('boxDims').textContent = b.dims;
-    shape.innerHTML = b.draw();
-    if (!reduced) {
-      svg.classList.remove('is-drawing');
-      void svg.offsetWidth;
-      svg.classList.add('is-drawing');
-    }
 
     // El visor 3D escucha este evento (box3d.js)
     document.dispatchEvent(new CustomEvent('avia:box', { detail: { key: key } }));
@@ -284,7 +181,7 @@
       setBox(tab.dataset.box);
     });
   });
-  setBox('rsc');
+  setBox('c1');
 
   /* ============================================================
      Formulario de contacto (demo — falta conectar al backend)

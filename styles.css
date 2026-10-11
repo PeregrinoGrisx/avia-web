@@ -489,7 +489,7 @@ a{ color:inherit; }
 
 .fold__dots{
   list-style:none; margin:30px 0 22px; padding:0;
-  display:grid; grid-template-columns:repeat(6,1fr); gap:10px;
+  display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
 }
 .fold__dot{ border-top:2px solid var(--line-dark); padding-top:12px; transition:.4s var(--ease); }
 .fold__dot b{

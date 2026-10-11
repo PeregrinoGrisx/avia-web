@@ -1,18 +1,19 @@
 /* ============================================================
    AVIA — armado de caja guiado por scroll
    ------------------------------------------------------------
-   La caja se construye desde la plancha plana: se levantan las
-   cuatro paredes, se pliegan las solapas menores y después las
-   mayores. El avance lo manda el scroll, así que subir deshace
-   el armado y bajar lo completa.
+   Se forma una bandeja C-1 desde la plancha troquelada: suben las
+   cuatro paredes y las orejas de esquina giran sobre el vértice para
+   encolarse contra la pared contigua. El avance lo manda el scroll,
+   así que subir deshace el armado y bajar lo completa.
 
    Cada panel cuelga de un grupo colocado en su línea de plegado,
    de modo que rota sobre el pliegue y no sobre su centro. Las
    solapas son hijas de su pared, así que acompañan el movimiento
    sin cálculos extra.
 
-   ⚠️ Geometría provisional: formato RSC genérico. Reemplazar por
-   el troquel real de AVIA cuando el cliente lo confirme.
+   La C-1 es el formato base de la Boix Quality Q-1530 que opera AVIA,
+   y el propio fabricante la describe como la estructura más básica,
+   así que es la que mejor explica el proceso. Ver boxdata.js.
    ============================================================ */
 (function () {
   'use strict';
@@ -29,17 +30,15 @@
      tiene que cambiar cuando empieza el movimiento, no cuando termina. */
   var STAGES = [
     { at: 0.00, title: 'Plancha troquelada',
-      text: 'El cartón llega plano y troquelado. En bodega ocupa una fracción del volumen de una caja armada, y así se almacena y se transporta.' },
-    { at: 0.10, title: 'Levante de paredes',
-      text: 'La formadora pliega las cuatro caras sobre sus líneas de corte y fija las esquinas. Aquí la precisión del equipo define la escuadra de la caja.' },
-    { at: 0.34, title: 'Caja abierta',
-      text: 'La caja queda formada y abierta, lista para recibir el producto. Es el momento en que se integra con tu línea: llenado, pesaje, control de calidad.' },
-    { at: 0.48, title: 'Solapas menores',
-      text: 'Con el producto adentro empieza el cierre. Las solapas cortas bajan primero y quedan de apoyo para las siguientes.' },
-    { at: 0.66, title: 'Caja cerrada',
-      text: 'Las solapas mayores cierran sobre las anteriores y se juntan al centro. Sale lista para sellado con cinta, cola o grapa.' },
+      text: 'El cartón llega plano y troquelado. En bodega ocupa una fracción del volumen de una bandeja armada, y así se almacena y se transporta.' },
+    { at: 0.12, title: 'Levante de paredes',
+      text: 'La formadora pliega las cuatro caras sobre sus líneas de corte. Aquí la precisión del equipo define la escuadra, y la escuadra define si el pallet se sostiene.' },
+    { at: 0.42, title: 'Encolado de esquinas',
+      text: 'Las orejas giran sobre el vértice y se pegan contra la pared contigua con hot melt por inyección. Es el punto donde la bandeja gana su resistencia.' },
+    { at: 0.62, title: 'Bandeja formada',
+      text: 'Sale lista para recibir el producto. Es el momento en que se integra con tu línea: llenado, pesaje y control de calidad.' },
     { at: 0.85, title: 'Lista para paletizar',
-      text: 'Cada caja se suma a la carga. Repetir esto miles de veces por turno, sin detenciones y con la misma escuadra, es exactamente el trabajo del que nos hacemos cargo.' }
+      text: 'Cada bandeja se suma a la carga. Repetir esto hasta 1.800 veces por hora, sin detenciones y con la misma escuadra, es exactamente el trabajo del que nos hacemos cargo.' }
   ];
 
   var elTitle = document.getElementById('foldTitle');
@@ -122,8 +121,11 @@
       color: 0x8C9195, roughness: 0.90, metalness: 0.0, side: THREE.DoubleSide
     });
 
-    /* ---------- Medidas de la caja ---------- */
-    var BW = 1.00, BD = 0.74, BH = 0.56, T = 0.026;
+    /* ---------- Medidas de la bandeja ----------
+       Proporciones de bandeja hortofrutícola: ancha, poco profunda.
+       Una caja alta no representaría lo que AVIA realmente monta.   */
+    var BW = 1.00, BD = 0.70, BH = 0.23, T = 0.022, TAB = 0.16;
+    var MATE_H = BH;
 
     function panel(w, h, d) { return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), card); }
 
@@ -135,27 +137,18 @@
 
     var walls = [];
 
-    // Paredes que pliegan sobre el eje X (frente y fondo)
+    // Paredes largas: pliegan sobre el eje X
     [1, -1].forEach(function (s) {
       var hinge = new THREE.Group();
       hinge.position.set(0, 0, s * BD / 2);
       var w = panel(BW, T, BH);
       w.position.z = s * BH / 2;
       hinge.add(w);
-
-      // Solapa mayor: cubre hasta el centro
-      var fh = new THREE.Group();
-      fh.position.z = s * BH;
-      var f = panel(BW, T, BD / 2 - 0.008);
-      f.position.z = s * (BD / 4);
-      fh.add(f);
-      hinge.add(fh);
-
-      walls.push({ hinge: hinge, flap: fh, axis: 'x', dir: -s, major: true });
+      walls.push({ hinge: hinge, axis: 'x', dir: -s, tabs: [] });
       box.add(hinge);
     });
 
-    // Paredes que pliegan sobre el eje Z (laterales)
+    // Paredes cortas: pliegan sobre el eje Z y llevan las orejas
     [1, -1].forEach(function (s) {
       var hinge = new THREE.Group();
       hinge.position.set(s * BW / 2, 0, 0);
@@ -163,20 +156,25 @@
       w.position.x = s * BH / 2;
       hinge.add(w);
 
-      // Solapa menor: pliega primero y queda por debajo
-      var fh = new THREE.Group();
-      fh.position.x = s * BH;
-      var f = panel(BW / 2 - 0.008, T, BD);
-      f.position.x = s * (BW / 4);
-      fh.add(f);
-      hinge.add(fh);
+      // Dos orejas, una por vértice. Cuelgan de un grupo situado en el
+      // canto de la pared, que una vez levantada queda vertical: girar
+      // ese grupo sobre su eje local X es girar sobre la arista de la
+      // esquina, que es exactamente lo que hace la máquina.
+      var tabs = [];
+      [1, -1].forEach(function (z) {
+        var th = new THREE.Group();
+        th.position.z = z * BD / 2;
+        var t = panel(BH, T, TAB);
+        t.position.set(s * BH / 2, 0, z * TAB / 2);
+        th.add(t);
+        th.userData.sign = s * z;
+        hinge.add(th);
+        tabs.push(th);
+      });
 
-      walls.push({ hinge: hinge, flap: fh, axis: 'z', dir: s, major: false });
+      walls[walls.length] = { hinge: hinge, axis: 'z', dir: s, tabs: tabs };
       box.add(hinge);
     });
-
-    // Las mayores cierran un espesor más arriba para apoyarse sobre las menores
-    walls.forEach(function (w) { if (w.major) w.flap.position.y = T * 1.1; });
 
     /* ---------- Cajas de acompañamiento para el paletizado ----------
        En el último tramo la caja deja de estar sola: aparecen otras
@@ -237,14 +235,12 @@
        cuadro, el cierre se mira a tamaño normal y el pallet pide alejarse.
        Claves en (avance, distancia), interpoladas suave.                */
     var DOLLY = [
-      [0.00, 6.10],   // plancha: cabe entera
-      [0.16, 5.20],   // paredes a medio abrir: es la silueta más alta
-                      // de toda la secuencia, con las solapas aún
-                      // extendidas en prolongación de cada cara
-      [0.32, 3.15],   // caja abierta: domina la pantalla pero cabe entera
-      [0.48, 3.15],   // se mantiene mientras está abierta
-      [0.68, 3.55],   // retrocede para mostrar el cierre completo
-      [1.00, 5.80]    // pallet
+      [0.00, 5.20],   // plancha: cabe entera
+      [0.18, 4.40],   // paredes subiendo
+      [0.38, 2.40],   // bandeja abierta: domina la pantalla
+      [0.66, 2.40],   // se mantiene durante el encolado
+      [0.80, 3.10],   // retrocede para mostrarla formada
+      [1.00, 5.40]    // pallet
     ];
 
     function dolly(p) {
@@ -296,22 +292,22 @@
     }
 
     function applyFold(p) {
-      var up    = seg(p, 0.04, 0.30); // levante de paredes
-      // Entre 0.30 y 0.48 no se mueve nada: es la pausa en que la caja
-      // queda abierta. Sin ese respiro el armado y el cierre se leen
-      // como un solo gesto y se pierde el estado más importante.
-      var minor = seg(p, 0.48, 0.64); // solapas menores
-      var major = seg(p, 0.66, 0.82); // solapas mayores
-      var pile  = seg(p, 0.84, 1.00); // paletizado
+      var up   = seg(p, 0.04, 0.34); // levante de paredes
+      var glue = seg(p, 0.44, 0.62); // giro y encolado de las orejas
+      var pile = seg(p, 0.84, 1.00); // paletizado
 
       walls.forEach(function (w) {
         var a = w.dir * HALF * up;
         if (w.axis === 'x') w.hinge.rotation.x = a;
         else w.hinge.rotation.z = a;
 
-        var fa = w.dir * HALF * (w.major ? major : minor);
-        if (w.axis === 'x') w.flap.rotation.x = fa;
-        else w.flap.rotation.z = fa;
+        // Las orejas giran sobre la arista vertical de la esquina.
+        // El signo sale del cruce entre el lado de la pared y el
+        // extremo donde está la oreja, para que las cuatro cierren
+        // hacia dentro y no dos hacia fuera.
+        w.tabs.forEach(function (t) {
+          t.rotation.x = -HALF * t.userData.sign * glue;
+        });
       });
 
       // La caja armada cede el centro y toma su esquina del bloque

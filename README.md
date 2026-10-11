@@ -169,27 +169,35 @@ plantas que no son de AVIA. Confirma el "no tengo, habría que conseguirlas" del
 **Blog**: existe con tres entradas de muestra ("entrada-de-muestra-1/2/3") nunca
 reemplazadas. No se incluye en el sitio nuevo.
 
-### ⚠️ Lo más importante: la sección Equipos es inventada
+### Equipos y formatos: ahora son los reales
 
-**El brief no nombra ni un solo formato de caja.** Menciona nueve veces "armado de cajas"
-y "arriendo de equipos de armado", pero nunca dice cuáles. Lo que está hoy en el sitio
-(RSC, bandeja, troquelada, con tapa, display), sus equipos asociados, cierres y
-rendimientos en cajas/min son **referencias genéricas de la industria del packing que
-redacté yo**, no el catálogo de AVIA.
+Jorge aportó la ficha del equipo que operan, una formadora **Boix Quality Q-1530**.
+Con eso la sección dejó de ser inventada. Datos de boix.com, revisados el 10-10-2026:
 
-Lo mismo vale para las geometrías 3D en `box3d.js`: proporciones plausibles, no medidas reales.
+| Dato | Valor |
+|---|---|
+| Producción | 400 a 1.800 cajas/hora, 6 velocidades |
+| Cajas que monta | Big Ear, C-1, Citrus Box, Columna Abierta, P-84, Plaform |
+| Sistema de cola | Hot melt por inyección (Nordson o Melton) |
+| Potencia | 6,6 kW sin compresor |
+| Peso | 1.500 kg sin compresor |
+| Cambio de medida | Manual por husillos, 20 a 40 min |
+| Funcionamiento | Mecánico, eléctrico y neumático |
 
-Preguntas concretas para Jorge antes de dar por buena esta sección:
+**Las seis son bandejas hortofrutícolas, no cajas americanas.** Fondo, cuatro paredes
+bajas y esquinas encoladas. Eso obligó a rehacer los dos visores 3D: el selector de
+formatos y la animación de armado, que antes formaba una RSC con solapas.
 
-1. ¿Qué formatos de caja arman efectivamente? ¿Cuáles son los más frecuentes?
-2. ¿Qué equipos tienen en arriendo? Marca, modelo, cantidad disponible.
-3. ¿Rendimiento real de cada equipo (cajas/min o cajas/hora)?
-4. ¿Medidas típicas de las cajas que trabajan?
-5. ¿Tienen fotos de los equipos y de las cajas? ¿En varios ángulos?
-6. ¿Existe algún modelo 3D o plano técnico de los equipos?
+La animación usa la **C-1** porque el propio fabricante la describe como la estructura
+más básica, así que es la que mejor explica el proceso.
 
-Con las respuestas 1–4 se corrigen los textos; con la 5 se puede reemplazar el 3D
-procedural por un visor de secuencia fotográfica; con la 6, cargar un GLB real.
+El catálogo vive en `boxdata.js`, compartido entre el panel de texto y el visor 3D.
+
+Queda por confirmar con Jorge:
+1. ¿Cuántas Q-1530 tienen? ¿Hay otros modelos?
+2. De los seis formatos, ¿cuáles montan efectivamente y cuál es el más frecuente?
+3. Medidas típicas de bandeja por formato.
+4. ¿Trabajan alguna variante de apilamiento (Defor, EasyStack, Traptab)?
 
 ### Datos a confirmar con el cliente
 - [ ] **Cifras de los KPIs**: están con valores de referencia (`+12` plantas, `+80` personas, `98%` disponibilidad). Solo `+6 años` sale del brief. Hay que reemplazarlas o quitar el bloque.
